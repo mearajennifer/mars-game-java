@@ -10,27 +10,32 @@ import java.util.InputMismatchException;
 public class Game {    
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        long delayNextSection = 1L;
+        Scanner scanner = new Scanner(System.in);
+        long delay = 2L;
         TimeUnit time = TimeUnit.SECONDS;
 
-        bootingUp();
-
         try {
+            bootingUp(time, delay);
+
             String playerName = getPlayerName(input);
-            time.sleep(delayNextSection);
 
             introduceGame(playerName, input);
-            time.sleep(delayNextSection);
+            time.sleep(delay);
 
             int numSuitcases = askNumSuitcases(input);
-            time.sleep(delayNextSection);
+            time.sleep(delay);
 
             String[] animalFriend = askAnimalFriend(input);
-            time.sleep(delayNextSection);
+            time.sleep(delay);
         
             String decorChoice = getDesign(input);
-            System.out.println(decorChoice);
-            time.sleep(delayNextSection);
+
+            lastMessage(playerName, numSuitcases, animalFriend, decorChoice);
+
+            System.out.println("press ENTER to continue");
+            scanner.nextLine();
+
+            blastOff(time, playerName, animalFriend);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -39,9 +44,7 @@ public class Game {
     }
 
     // method to simulate booting up the game
-    public static void bootingUp() {
-        long timeToSleep = 2L;
-        TimeUnit time = TimeUnit.SECONDS;
+    public static void bootingUp(TimeUnit time, long timeToSleep) {
         
         try {
             System.out.println("The game is about to start...");
@@ -143,25 +146,33 @@ public class Game {
     public static String getDesign(Scanner input) {
         System.out.println("\nNASA has an interior design team offering to outfit your space ship.");
         System.out.println("You have a couple of options for the decor:");
-        System.out.println("\nYour options are:");
+        System.out.println("Your options are:");
         System.out.println(" A Sleek, modern minimalism");
         System.out.println(" B Retro/vintage space age");
         System.out.println(" C SF hippie chic");
         System.out.println("Which decor would you like? Choose A, B, or C.");
+        String decorChoice;
         String decor;
 
         while (true) {
             System.out.print("> ");
-            decor = input.next();
+            decorChoice = input.next();
 
             try {
-                decor = decor.toUpperCase();
+                decorChoice = decorChoice.toUpperCase();
             } catch(InputMismatchException e) {
                 System.out.println("Please only enter 'A', 'B', or 'C'!");
                 continue;
             }
 
-            if (decor.equals("A") || decor.equals("B") || decor.equals("C")) {
+            if (decorChoice.equals("A")) {
+                decor = "modern";
+                break;
+            } else if (decorChoice.equals("B")) {
+                decor = "retro";
+                break;
+            } else if (decorChoice.equals("C")) {
+                decor = "hippie";
                 break;
             } else {
                 System.out.println("Please only enter 'A', 'B', or 'C'!");
@@ -171,5 +182,45 @@ public class Game {
         return decor;
     }
 
+    public static void lastMessage(String playerName, int numSuitcases, String[]animalFriend, String decorChoice) {
+        System.out.println("\nI can see it now:");
+        System.out.println(String.format("%s and %s surfing the celestial abyss...", playerName, animalFriend[0]));
+        System.out.println(String.format("with all their gear in %d suitcases...", numSuitcases));
+
+        if (numSuitcases > 2) {
+            System.out.println("Ahem, I mean 2 suitcases, right???");
+            System.out.println("...");
+        }
+
+        System.out.println(String.format("in a %s spaceship...\n", decorChoice));    
+    }
+
+    public static void blastOff(TimeUnit time, String playerName, String[] animalFriend) {
+        System.out.println(String.format("%s -- the day is here!", playerName));
+        System.out.println(String.format("You crawl into the spaceship with %s...", animalFriend[0]));
+
+        long countdown = 1L;
+        long wait = 4L;
+
+        try {
+            time.sleep(wait);
+            System.out.println("Brace for blast off!");
+            time.sleep(countdown);
+            System.out.println("5...");
+            time.sleep(countdown);
+            System.out.println("4...");
+            time.sleep(countdown);
+            System.out.println("3...");
+            time.sleep(countdown);
+            System.out.println("2...");
+            time.sleep(countdown);
+            System.out.println("1...");
+            time.sleep(countdown);
+            System.out.println("*** BLAST OFF ***");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+    }
 
 }
